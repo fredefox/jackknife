@@ -25,9 +25,6 @@ mean = fini . foldl' go (T 0 0)
             n' = n + 1
 
 
-jackknife :: ([a] -> b) -> [a] -> [b]
-jackknife = Sequential.jackknife
-
 crud :: [Float] -> [Float]
 crud = zipWith (\x a -> sin (x / 300)**2 + a) [0..]
 
@@ -44,6 +41,9 @@ main = do
   putStrLn $ "jack mean min:  " ++ show (minimum j)
   putStrLn $ "jack mean max:  " ++ show (maximum j)
   defaultMain
-        [
-         bench "jackknife" (nf (jackknife  mean) rs)
-         ]
+    [ bench "[sequential] jackknife" (nf (Sequential.jackknife  mean) rs)
+    , bench "[explicit]   jackknife" (nf (Explicit.jackknife    mean) rs)
+    , bench "[eval]       jackknife" (nf (Eval.jackknife        mean) rs)
+    , bench "[strat]      jackknife" (nf (Strat.jackknife       mean) rs)
+    , bench "[monad-par]  jackknife" (nf (MonadPar.jackknife    mean) rs)
+    ]
