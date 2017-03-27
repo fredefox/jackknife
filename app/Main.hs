@@ -1,4 +1,6 @@
 module Main where
 
+import qualified Jackknife (main)
+
 main :: IO ()
-main = error "Unimplemented"
+main = Jackknife.main
