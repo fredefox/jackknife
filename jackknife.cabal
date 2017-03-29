@@ -24,6 +24,8 @@ library
   build-depends:       base >= 4.7 && < 5,
                        parallel >= 3.2.1.0
   default-language:    Haskell2010
+  if flag(debug)
+    ghc-options:       -eventlog
 
 executable jackknife
   hs-source-dirs:      app
@@ -34,6 +36,8 @@ executable jackknife
                      , random
                      , criterion
   default-language:    Haskell2010
+  if flag(debug)
+    ghc-options:       -rtsopts -threaded -debug
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -48,3 +52,7 @@ test-suite test
 source-repository head
   type:     git
   location: https://github.com/fredefox/jackknife
+
+flag debug
+  default: True
+  manual:  True
