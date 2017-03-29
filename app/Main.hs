@@ -37,7 +37,7 @@ main = do
   let rs = crud xs ++ ys
   putStrLn $ "sample mean:    " ++ show (mean rs)
 
-  let j = jackknife mean rs :: [Float]
+  let j = Sequential.jackknife mean rs :: [Float]
   putStrLn $ "jack mean min:  " ++ show (minimum j)
   putStrLn $ "jack mean max:  " ++ show (maximum j)
   defaultMain
