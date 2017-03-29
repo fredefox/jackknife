@@ -24,8 +24,8 @@ chunksOf n xs = l : chunksOf n r
 
 parMap :: NFData b => (a -> b) -> [a] -> [b]
 parMap _ []       = []
-parMap f (x : xs) = rnf fx `par` rnf fxs `pseq` fx : fxs
---                  ^divide^^^^^ and    ^conquer
+parMap f (x : xs) = rnf fx `par` (rnf fxs `pseq` fx : fxs)
+--                  ^divide^^^^^^^^^^^^^ and    ^conquer
   where
     fx  = f x
     fxs = parMap f xs
