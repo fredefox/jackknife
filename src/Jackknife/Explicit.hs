@@ -9,7 +9,8 @@ granularity :: Int
 granularity = 10
 
 jackknife :: NFData b => ([a] -> b) -> [a] -> [b]
-jackknife f = parMapChunked granularity f . resamples 500
+-- jackknife f = parMapChunked granularity f . resamples 500
+jackknife f = parMap f . resamples 500
 
 -- | Parallel map with granularity control. It performs the map on parts of the
 -- list of the specified size.
@@ -24,7 +25,7 @@ chunksOf n xs = l : chunksOf n r
 
 parMap :: NFData b => (a -> b) -> [a] -> [b]
 parMap _ []       = []
-parMap f (x : xs) = rnf fx `par` (rnf fxs `pseq` fx : fxs)
+parMap f (x : xs) = fx `par` (fxs `pseq` fx : fxs)
 --                  ^divide^^^^^^^^^^^^^ and    ^conquer
   where
     fx  = f x
