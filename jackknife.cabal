@@ -38,7 +38,7 @@ library
 executable jackknife
   hs-source-dirs:      app
   main-is:             Jackknife.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts="-N"
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , criterion
                      , jackknife
@@ -79,9 +79,9 @@ source-repository head
   location: https://github.com/fredefox/jackknife
 
 flag debug
-  default: False
+  default: True
   manual:  True
 
 flag profiling
-  default: True
+  default: False
   manual:  True
