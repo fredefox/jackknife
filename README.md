@@ -1,12 +1,11 @@
-To use multiple cores the executable must be built with this in mind:
+Useful commands
 
-    stack build --executable-profiling
+    stack build --force-dirty
+    stack exec jackknife -- +RTS -N4 -ls -lf -A2g
+    threadscope jackknife.eventlog
 
-See also the flags in the cabal-file.
+Note that compile-time flags are controlled in the cabal-file.
 
-And we must also explicitly say how many cores we want to use when
-executing the program:
-
-    stack exec jackknife -- -N4
-
-`-ls` will give us an eventlog.
+If you disable the `debug` flag and enable the `profiling` flag in the
+cabal file and execute `jackknife-mem` you will see that `resamples 500`
+consumes around ~1.5gb of data.
