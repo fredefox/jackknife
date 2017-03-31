@@ -40,10 +40,10 @@ main = do
   let j = Explicit.jackknife mean rs :: [Float]
   putStrLn $ "jack mean min:  " ++ show (minimum j)
   putStrLn $ "jack mean max:  " ++ show (maximum j)
-  -- defaultMain
-  --   [ bench "[sequential] jackknife" (nf (Sequential.jackknife  mean) rs)
-  --   , bench "[explicit]   jackknife" (nf (Explicit.jackknife    mean) rs)
-  --   , bench "[eval]       jackknife" (nf (Eval.jackknife        mean) rs)
-  --   , bench "[strat]      jackknife" (nf (Strat.jackknife       mean) rs)
-  --   , bench "[monad-par]  jackknife" (nf (MonadPar.jackknife    mean) rs)
-  --   ]
+  defaultMain
+    [ bench "[sequential] jackknife" (nf (Sequential.jackknife  mean) rs)
+    , bench "[explicit]   jackknife" (nf (Explicit.jackknife    mean) rs)
+    , bench "[eval]       jackknife" (nf (Eval.jackknife        mean) rs)
+    , bench "[strat]      jackknife" (nf (Strat.jackknife       mean) rs)
+    , bench "[monad-par]  jackknife" (nf (MonadPar.jackknife    mean) rs)
+    ]

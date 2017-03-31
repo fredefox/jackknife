@@ -33,7 +33,7 @@ library
                        deepseq
   default-language:    Haskell2010
   if flag(debug)
-    ghc-options:       -eventlog
+    ghc-options:       -debug
 
 executable jackknife
   hs-source-dirs:      app
