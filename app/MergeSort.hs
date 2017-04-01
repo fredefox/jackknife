@@ -26,8 +26,8 @@ aList :: [Float]
 aList = take 1000000 $ randoms (mkStdGen 1337)
 
 main :: IO ()
--- main = doBenchmark aList
-main = evaluate . Eval.mergesort $ aList
+main = doBenchmark aList
+-- main = evaluate . Eval.mergesort $ aList
 
 evaluate :: NFData a => a -> IO ()
 evaluate x = rnf x `pseq` return ()

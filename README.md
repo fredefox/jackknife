@@ -72,4 +72,38 @@ and finishes before it was even started[^2].
 Mergesort
 =========
 
-See [this diagram](assets/mergesort.png).
+See [this diagram](assets/mergesort.png). From this diagram we see there is an
+initial amount of work being done (presumably generating the random list). Then
+some work is done in parallel and finally there is a big chunk of sequential
+work. This work may be merging back the results, but this is not clear at this
+point.
+
+The benchmark:
+
+    stack exec mergesort -- +RTS -N4 -ls -lf -A1.6g
+    
+Gave the following results:
+
+    benchmarking [sequential] mergesort
+    time                 3.274 s    (2.982 s .. 3.598 s)
+                         0.999 R²   (0.996 R² .. 1.000 R²)
+    mean                 3.266 s    (3.217 s .. 3.305 s)
+    std dev              60.89 ms   (0.0 s .. 67.74 ms)
+    variance introduced by outliers: 19% (moderately inflated)
+
+    benchmarking [explicit]   mergesort
+    time                 2.649 s    (1.637 s .. 3.083 s)
+                         0.982 R²   (0.955 R² .. 1.000 R²)
+    mean                 2.713 s    (2.549 s .. 2.775 s)
+    std dev              153.3 ms   (0.0 s .. 175.3 ms)
+    variance introduced by outliers: 19% (moderately inflated)
+
+    benchmarking [eval]       mergesort
+    time                 2.996 s    (NaN s .. 3.834 s)
+                         0.991 R²   (0.975 R² .. 1.000 R²)
+    mean                 2.902 s    (2.823 s .. 3.030 s)
+    std dev              111.7 ms   (0.0 s .. 119.1 ms)
+    variance introduced by outliers: 19% (moderately inflated)
+
+
+So we see that we have been able to get a modest speed improvement.
