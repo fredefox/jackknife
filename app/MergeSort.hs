@@ -9,7 +9,7 @@ import qualified MergeSort.Style.Sequential as Sequential (mergesort)
 import qualified MergeSort.Style.Explicit   as Explicit   (mergesort)
 import qualified AltMS
 -- TODO Implement some of these:
--- import qualified MergeSort.Style.Eval       as Eval       (mergesort)
+import qualified MergeSort.Style.Eval       as Eval       (mergesort)
 -- import qualified MergeSort.Style.Strat      as Strat      (mergesort)
 -- import qualified MergeSort.Style.MonadPar   as MonadPar   (mergesort)
 
@@ -20,7 +20,7 @@ doBenchmark rs =
     , bench "altms explicit" $ nf (AltMS.pmergesort 2) rs  
     , bench "[sequential] mergesort" (nf Sequential.mergesort rs)
     , bench "[explicit]   mergesort" (nf Explicit.mergesort   rs)
-    -- , bench "[eval]       mergesort" (nf Eval.mergesort       rs)
+    , bench "[eval]       mergesort" (nf Eval.mergesort       rs)
     -- , bench "[strat]      mergesort" (nf Strat.mergesort      rs)
     -- , bench "[monad-par]  mergesort" (nf MonadPar.mergesort   rs)
     ]

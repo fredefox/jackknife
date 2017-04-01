@@ -28,7 +28,7 @@ library
                      -- , MergeSort.Style.MonadPar
                      -- , MergeSort.Style.Strat
                      , MergeSort.Style.Explicit
-                     -- , MergeSort.Style.Eval
+                     , MergeSort.Style.Eval
   build-depends:       base >= 4.7 && < 5,
                        monad-par >= 0.3.4.8,
                        parallel >= 3.2.1.0,

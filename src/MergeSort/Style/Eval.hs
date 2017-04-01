@@ -1,23 +1,30 @@
-module MergeSort.Util (mergesort, merge, halve) where
+module MergeSort.Style.Eval (mergesort) where
 
--- | Sequential reference implementation
+import Control.Parallel.Strategies
+
+import MergeSort.Util (halve, merge)
+import qualified MergeSort.Style.Sequential as Sequential
+
+granularity :: Int
+granularity = 5
+
 mergesort :: Ord a => [a] -> [a]
-mergesort [] = []
-mergesort [x] = [x]
-mergesort xs = l' `merge` r'
-  where
-    (l, r) = halve xs
-    l' = mergesort l
-    r' = mergesort r
+mergesort = granularMergesort granularity
 
-merge :: Ord a => [a] -> [a] -> [a]
-merge []           ys           = ys
-merge xs           []           = xs
-merge xs@(x : xss) ys@(y : yss) = case compare x y of
-  LT -> x : merge xss ys
-  _  -> y : merge xs  yss
-
-halve :: [a] -> ([a], [a])
-halve xs = splitAt (n `div` 2) xs
-  where
-    n = length xs
+-- | Explicit parallel implementation with granularity control.
+granularMergesort :: Ord a => Int -> [a] -> [a]
+granularMergesort n
+  | n <= 0    = Sequential.mergesort
+  | otherwise = runEval . parMergesort
+    where
+      step :: Ord a => [a] -> [a]
+      step = granularMergesort (n - 1)
+      parMergesort :: Ord a => [a] -> Eval [a]
+      parMergesort [] = pure []
+      parMergesort [x] = pure [x]
+      parMergesort xs = do
+        l' <- rpar $ step l
+        r' <- rseq $ step r
+        pure $ l' `merge` r'
+        where
+          (l, r) = halve xs
