@@ -1,5 +1,8 @@
+Jackknife
+=========
+
 User guide
-==========
+----------
 Useful commands
 
     stack build --force-dirty
@@ -13,7 +16,7 @@ cabal file and execute `jackknife-mem` you will see that `resamples 500`
 consumes around ~1.5gb of data.
 
 Benchmark
-=========
+---------
 This benchmark was executed with:
 
     ./jackknife +RTS -N4 -ls -lf -A1.6g
@@ -65,3 +68,8 @@ and finishes before it was even started[^2].
       around 512m.
 [^2]: This was seriously the output I got. Perhaps the error can be attributed
       to a bug in criterion.
+
+Mergesort
+=========
+
+See [this diagram](assets/mergesort.png).
