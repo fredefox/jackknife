@@ -22,6 +22,7 @@ library
                      , Jackknife.Sequential
                      , Jackknife.MonadPar
                      , Jackknife.Strat
+                     , AltMS
                      , MergeSort.Util
                      , MergeSort.Style.Sequential
                      -- , MergeSort.Style.MonadPar
