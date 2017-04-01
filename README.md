@@ -1,3 +1,12 @@
+<!--
+You can generate a nice pdf with pandoc:
+
+    pandoc README.md -o report.pdf {double-dash}latex-engine=xelatex
+
+Substitute {double-dash} for an actual double-dash. You can't
+have double-dashes in an html comment, that's why I've written it like this.
+-->
+
 Jackknife
 =========
 
