@@ -61,6 +61,7 @@ It seems that we have invented a time-machine - namely our explicit parallel
 version -- that's pretty impressive, it's so fast that it travels back in time
 and finishes before it was even started[^2].
 
-[^1]: Higher values seem to crash my computer.
+[^1]: Higher values seem to crash my computer. I start to see a speed-up
+      around 512m.
 [^2]: This was seriously the output I got. Perhaps the error can be attributed
       to a bug in criterion.
