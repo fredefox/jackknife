@@ -1,9 +1,19 @@
-module ArrMS where
+module ArrayQuickSort where
 
 import Data.Array.MArray
 import Data.Array.IO
 import Control.Concurrent
 import System.IO.Unsafe
+
+--Testing
+import Test.QuickCheck
+prop_qsort :: [Int] -> Bool
+prop_qsort xs = ordered $ qsort xs
+ordered [] = True
+ordered (x:xs) = ordered' x xs
+  where ordered' _ [] = True
+        ordered' x (y:xs) = x <= y && ordered' y xs
+test = quickCheck prop_qsort
 
 --Slice arr f l includes the indexes f..l-1
 data Slice a = Slice {sliceArray :: IOArray Int a,
@@ -38,20 +48,29 @@ sliceToList' arr f l | f == l = return []
 --in-place mergesort is nontrivial, I'll do quicksort instead
 qsort :: Ord a => [a] -> [a]
 qsort xs = unsafePerformIO $ do
-  let len = length xs
-  arr <- newListArray (0, len-1)xs
-  inPlaceQSort arr 0 (len-1)
+  let last = length xs - 1
+  arr <- newListArray (0, last) xs
+  inPlaceQSort arr 0 last
   getElems arr
 
 inPlaceQSort :: Ord a => IOArray Int a -> Int -> Int -> IO ()
-inPlaceQSort arr f l | l - f <= 1 = return ()
+inPlaceQSort arr f l | l <= f = return ()
 inPlaceQSort arr f l = do
   p <- splitPivot arr f l --p is the pointer to the pivot element
-  inPlaceQSort arr f p
+  inPlaceQSort arr f (p-1)
   inPlaceQSort arr (p+1) l
 splitPivot :: Ord a => IOArray Int a -> Int -> Int -> IO Int
 splitPivot arr f l
   | f == l = return l
+  | f + 1 == l = do
+      cand <- read f
+      pivot <- read l
+      if cand > pivot
+         then do
+        write f pivot
+        write l cand
+        return f
+        else return l
   | otherwise = do
       cand <- read f
       pivot <- read l
@@ -66,33 +85,3 @@ splitPivot arr f l
   where write = writeArray arr
         read = readArray arr
                        
-{-
-mergesort :: Ord a => [a] -> [a]
-mergesort xs = unsafePerformIO $ do
-  arr <- newListArray (0, length xs - 1) xs
-  sl <- toSlice arr
-  inplaceMS sl
-  xs' <- getElems arr
-  return xs'
-
-inplaceMS :: Ord a => Slice a -> IO ()
-inplaceMS slice
-  | lengthSlice slice <= 1 = return ()
-  | otherwise =  do let (slice1,slice2) = halve slice
-                    inplaceMS slice1
-                    inplaceMS slice2
-                    merge slice1 slice2
---merge two adjacent sorted slices in-place
-merge :: Ord a => Slice a -> Slice a -> IO ()
-merge slA slB | lengthSlice slA == 0 || lengthSlice slB == 0 = return ()
-              | otherwise = do a <- readSlice 0 slA
-                               b <- readSlice 0 slB
-                               merge' a b slA slB
-merge' a b slA slB | a <= b = do let slA' = dropSlice 1 slA
-                                 a' <- readSlice 0 slA'
-                                 merge' a' b slA' slB
-                   | otherwise = do writeSlice 0 b slA
-                                    let slB' = dropSlice 1 slB
-                                    b' <- readSlice 0 slB'
-                                    merge' a b' slA slB'
--}

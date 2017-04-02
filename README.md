@@ -84,8 +84,8 @@ Mergesort
 See [this diagram](assets/mergesort.png). From this diagram we see there is an
 initial amount of work being done (presumably generating the random list). Then
 some work is done in parallel and finally there is a big chunk of sequential
-work. This work may be merging back the results, but this is not clear at this
-point.
+work. We conjecture that work corresponds to the final merge,
+but we're not certain.
 
 The benchmark:
 
