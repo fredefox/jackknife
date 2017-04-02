@@ -90,29 +90,41 @@ but we're not certain.
 The benchmark:
 
     stack exec mergesort -- +RTS -N4 -ls -lf -A1.6g
-    
+
 Gave the following results:
 
     benchmarking [sequential] mergesort
-    time                 3.274 s    (2.982 s .. 3.598 s)
-                         0.999 R²   (0.996 R² .. 1.000 R²)
-    mean                 3.266 s    (3.217 s .. 3.305 s)
-    std dev              60.89 ms   (0.0 s .. 67.74 ms)
-    variance introduced by outliers: 19% (moderately inflated)
+    time                 159.1 ms   (120.8 ms .. 181.0 ms)
+                         0.970 R²   (0.872 R² .. 0.999 R²)
+    mean                 178.7 ms   (166.4 ms .. 193.6 ms)
+    std dev              17.80 ms   (12.53 ms .. 22.14 ms)
+    variance introduced by outliers: 27% (moderately inflated)
+
+    benchmarking sequential array qsort
+    time                 60.43 ms   (59.95 ms .. 60.73 ms)
+                         1.000 R²   (1.000 R² .. 1.000 R²)
+    mean                 60.81 ms   (60.60 ms .. 61.16 ms)
+    std dev              442.7 μs   (167.7 μs .. 615.7 μs)
+
+    benchmarking parallel array qsort
+    time                 33.65 ms   (31.94 ms .. 35.70 ms)
+                         0.993 R²   (0.984 R² .. 0.999 R²)
+    mean                 31.86 ms   (28.45 ms .. 33.29 ms)
+    std dev              4.464 ms   (1.230 ms .. 7.683 ms)
+    variance introduced by outliers: 55% (severely inflated)
 
     benchmarking [explicit]   mergesort
-    time                 2.649 s    (1.637 s .. 3.083 s)
-                         0.982 R²   (0.955 R² .. 1.000 R²)
-    mean                 2.713 s    (2.549 s .. 2.775 s)
-    std dev              153.3 ms   (0.0 s .. 175.3 ms)
-    variance introduced by outliers: 19% (moderately inflated)
+    time                 147.1 ms   (137.8 ms .. 156.8 ms)
+                         0.994 R²   (0.976 R² .. 1.000 R²)
+    mean                 143.6 ms   (140.3 ms .. 148.5 ms)
+    std dev              5.622 ms   (3.505 ms .. 7.887 ms)
+    variance introduced by outliers: 12% (moderately inflated)
 
     benchmarking [eval]       mergesort
-    time                 2.996 s    (NaN s .. 3.834 s)
-                         0.991 R²   (0.975 R² .. 1.000 R²)
-    mean                 2.902 s    (2.823 s .. 3.030 s)
-    std dev              111.7 ms   (0.0 s .. 119.1 ms)
-    variance introduced by outliers: 19% (moderately inflated)
-
+    time                 152.4 ms   (140.9 ms .. 164.4 ms)
+                         0.993 R²   (0.980 R² .. 1.000 R²)
+    mean                 144.2 ms   (139.5 ms .. 149.2 ms)
+    std dev              6.939 ms   (5.013 ms .. 8.384 ms)
+    variance introduced by outliers: 12% (moderately inflated)
 
 So we see that we have been able to get a modest speed improvement.
