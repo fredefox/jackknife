@@ -5,7 +5,7 @@ import Control.DeepSeq (NFData, rnf)
 import Criterion.Main
 import Control.Parallel
 
-import qualified ArrayQuickSort (qsort)
+import qualified ArrayQuickSort (qsort,pqsort)
 import qualified MergeSort.Style.Sequential as Sequential (mergesort)
 import qualified MergeSort.Style.Explicit   as Explicit   (mergesort)
 -- TODO Implement some of these:
@@ -18,6 +18,7 @@ doBenchmark rs =
   defaultMain
     [ bench "[sequential] mergesort" (nf Sequential.mergesort rs)
     , bench "sequential array qsort" (nf ArrayQuickSort.qsort rs)
+    , bench "parallel array qsort" (nf ArrayQuickSort.pqsort rs)
     , bench "[explicit]   mergesort" (nf Explicit.mergesort   rs)
     , bench "[eval]       mergesort" (nf Eval.mergesort       rs)
     -- , bench "[strat]      mergesort" (nf Strat.mergesort      rs)

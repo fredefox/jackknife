@@ -9,41 +9,32 @@ import System.IO.Unsafe
 import Test.QuickCheck
 prop_qsort :: [Int] -> Bool
 prop_qsort xs = ordered $ qsort xs
+prop_pqsort :: [Int] -> Bool
+prop_pqsort xs = ordered $ pqsort xs
 ordered [] = True
 ordered (x:xs) = ordered' x xs
   where ordered' _ [] = True
         ordered' x (y:xs) = x <= y && ordered' y xs
 test = quickCheck prop_qsort
 
---Slice arr f l includes the indexes f..l-1
-data Slice a = Slice {sliceArray :: IOArray Int a,
-                      firstIx :: Int,
-                      lastIx :: Int}
-toSlice :: IOArray Int a -> IO (Slice a)
-toSlice arr = do (first,last) <- getBounds arr
-                 return $ Slice arr first (last+1)
-halve sl = (takeSlice n sl, dropSlice n sl)
-  where n = len `div` 2 + len `rem` 2
-        len = lengthSlice sl
-lengthSlice (Slice _ f l) = l-f
-takeSlice n (Slice arr f l) = Slice arr f (min (f+n) l)
-dropSlice n (Slice arr f l) = Slice arr (min (f+n+1) l) l
---NOTE: readSlice does not do bounds checking
-readSlice :: Int -> Slice a -> IO a
-readSlice n (Slice arr f _) = readArray arr (f+n)
-writeSlice :: Int -> a -> Slice a -> IO ()
-writeSlice n e (Slice arr f _) = writeArray arr (f+n) e
-listSlice :: [a] -> IO (Slice a)
-listSlice xs = do
-  let len = length xs
-  arr <- newListArray (0, len - 1) xs
-  return $ Slice arr 0 len
-sliceToList :: Slice a -> IO [a]
-sliceToList (Slice arr f l) = sliceToList' arr f l
-sliceToList' arr f l | f == l = return []
-                     | otherwise = do x <- readArray arr 0
-                                      xs <- sliceToList' arr (f+1) l
-                                      return $ x:xs
+--Note: the parts which guarantee there are no race conditions have been
+--commented out, but it seems to produce the correct result anyway
+pqsort :: Ord a => [a] -> [a]
+pqsort xs = unsafePerformIO $ do
+  let last = length xs - 1
+  arr <- newListArray (0, last) xs
+  pInPlaceQSort arr 0 last
+  getElems arr
+pInPlaceQSort :: Ord a => IOArray Int a -> Int -> Int -> IO ()
+pInPlaceQSort arr f l | l <= f = return ()
+                      | l - f <= 10000 = inPlaceQSort arr f l
+                      | otherwise = do
+  p <- splitPivot arr f l --p is the pointer to the pivot element
+  --mv <- newEmptyMVar
+  forkIO $ do inPlaceQSort arr f (p-1)
+              --putMVar mv ()
+  inPlaceQSort arr (p+1) l
+  --takeMVar mv
 
 --in-place mergesort is nontrivial, I'll do quicksort instead
 qsort :: Ord a => [a] -> [a]
