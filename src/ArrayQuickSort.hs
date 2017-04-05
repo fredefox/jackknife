@@ -36,7 +36,6 @@ pInPlaceQSort arr f l | l <= f = return ()
   inPlaceQSort arr (p+1) l
   --takeMVar mv
 
---in-place mergesort is nontrivial, I'll do quicksort instead
 qsort :: Ord a => [a] -> [a]
 qsort xs = unsafePerformIO $ do
   let last = length xs - 1
