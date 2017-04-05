@@ -1,28 +1,41 @@
-<!--
-You can generate a nice pdf with pandoc:
-
-    pandoc README.md -o report.pdf {double-dash}latex-engine=xelatex
-
-Substitute {double-dash} for an actual double-dash. You can't
-have double-dashes in an html comment, that's why I've written it like this.
--->
-
 Jackknife
 =========
 
-User guide
+Building
 ----------
-Useful commands
+To build the project use using cabal. It is adviced that you do it in
+a sandbox, but this is optional:
 
-    stack build --force-dirty
-    stack exec jackknife -- +RTS -N4 -ls -lf -A2g
+    cabal sandbox init
+
+Then do:
+
+    cabal install
+
+The two main executables in this project are `jackknife` and `benchmark`,
+if you don't want to install them globally on your machine you
+can use the following commands to execute them locally:
+
+    cabal exec jackknife
+
+and
+
+    cabal exec mergesort
+
+If you need to pass run-time flags to the exectuables this can be done like so:
+
+    cabal exec jackknife -- +RTS -N4 -ls -lf -A2g
+
+This command will also create an eventlog that can be inspected with threadscope:
+
     threadscope jackknife.eventlog
 
-Note that compile-time flags are controlled in the cabal-file.
+Note that compile-time flags are controlled in the cabal-file. `-debug` is enabled
+by default.
 
 If you disable the `debug` flag and enable the `profiling` flag in the
-cabal file and execute `jackknife-mem` you will see that `resamples 500`
-consumes around ~1.5gb of data.
+cabal file and execute `jackknife-mem` with profiling enabled you will see
+that `resamples 500` consumes around ~1.5gb of data.
 
 Benchmark
 ---------
@@ -31,6 +44,8 @@ This benchmark was executed with:
     ./jackknife +RTS -N4 -ls -lf -A1.6g
 
 Notice that we are running the benchmarks with 1.6gb of memory[^1].
+It should be added as well that this was run on a machine with 2
+physical cores and hyperthreading (an i7 processor).
 
 Output of benchmark (pruned):
 
