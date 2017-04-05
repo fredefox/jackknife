@@ -12,6 +12,14 @@ Then do:
 
     cabal install
 
+If you're really opposed to using a build system you can acheive similar
+effects using ghc directly with appropriate flags:
+
+    ghc -debug -threaded -rtsopts -with-rtsopts=-N --make app/Jackknife.hs -isrc
+    ghc -debug -threaded -rtsopts -with-rtsopts=-N --make app/MergeSort.hs -isrc
+
+This will place the executables in the `app` directory.
+
 The two main executables in this project are `jackknife` and `benchmark`,
 if you don't want to install them globally on your machine you
 can use the following commands to execute them locally:
